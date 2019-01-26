@@ -23,6 +23,8 @@ import(
 
 type quizInterface struct{}
 
+var ques Questions
+
 func main() {
 	fmt.Println( "--- Server Starting ---")
 
@@ -43,17 +45,30 @@ func main() {
 
 // Implementation of Interfaces
 
-func (quizInterface) CheatSheet( ctx context.Context, void *iquiz.Void) (*iquiz.QuestionList, error) {
+func (quizInterface) List( ctx context.Context, void *iquiz.Void) (*iquiz.QuestionList, error) {
+		return ques.GetQuestions(), nil
+}
 
-	question := &iquiz.Question{
-		Id: 1,
-		Question:  "Who is the only member of ZZ Top who doesn’t have a beard?",
-	 	CorrectAnswer: "Frank Beard",
-	 	AnswerOptions: []string{ "Jimmy Page", "Frank Zampa"},
+func (quizInterface) Response( ctx context.Context, resp *iquiz.QuizResponse) (*iquiz.Void, error){
+	empty := &iquiz.Void{}
+
+	all_questions := ques.GetQuestions()
+
+	fmt.Printf( "- Results for Name: %s \n", resp.Name )
+	correct := 0
+	for _, quest := range all_questions.Questions {
+		for _, a := range resp.Answers {
+			if quest.Id != a.Id {
+				continue
+			}
+
+			if quest.CorrectAnswer == a.Answer {
+				correct++
+			} 
+		}
 	}
 
-	question_list := &iquiz.QuestionList{};
-	question_list.Questions = append( question_list.Questions, question )
-
-	return question_list, nil
+	result := int( (float64(correct) / float64(len( all_questions.Questions))) * 100 )
+	fmt.Printf( "Result: %d \n", result )
+	return empty, nil
 }

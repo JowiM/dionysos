@@ -21,7 +21,7 @@ import (
 	"log"
 	
 	"github.com/spf13/cobra"
-	"google.golang.org/grpc"
+	"github.com/kyokomi/emoji"
 
 	"iquiz"
 )
@@ -32,17 +32,9 @@ var getQACmd = &cobra.Command{
 	Short: "List all questions and its corresponding answers",
 	Long: `List all questions and corresponding answers aka Cheat Sheet.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("-- CheatSheet --")
+		emoji.Println("--- :disappointed: CheatSheet :disappointed: ---")
 
-		conn, err := grpc.Dial(":10101", grpc.WithInsecure())
-		if err != nil {
-			log.Fatalf("Could not connect to backend: %v\n", err)
-			os.Exit(1)
-		}
-
-		client := iquiz.NewQuizClient(conn)
-
-		l, err := client.CheatSheet(context.Background(), &iquiz.Void{})
+		l, err := client.List(context.Background(), &iquiz.Void{})
 		if err != nil {
 			log.Fatalf("Could not get questions and Answers: %v", err)
 			os.Exit(1)
@@ -56,14 +48,4 @@ var getQACmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(getQACmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// getQACmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// getQACmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

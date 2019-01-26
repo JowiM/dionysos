@@ -12,11 +12,12 @@ message Question {
 message Answer {
 	int32 id = 1;
 	string answer = 2;
+	bool isCorrect = 3;
 }
 
 message QuizResponse {
 	string name = 1;
-	repeated Answer answer = 2;
+	repeated Answer answers = 2;
 }
 
 message QuestionList {
@@ -26,5 +27,6 @@ message QuestionList {
 message Void {}
 
 service Quiz {
-	rpc CheatSheet(Void) returns(QuestionList) {}
+	rpc List(Void) returns(QuestionList) {}
+	rpc Response(QuizResponse) returns(Void){}
 }
