@@ -5,8 +5,8 @@ package iquiz;
 message Question {
 	int32 id = 1;
 	string question = 2;
-	string correct_answer = 3;
-	repeated string answer_options = 4; 
+	string correctAnswer = 3;
+	repeated string answerOptions = 4; 
 }
 
 message Answer {
