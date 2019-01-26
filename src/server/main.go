@@ -48,15 +48,14 @@ func (quizInterface) List(ctx context.Context, void *iquiz.Void) (*iquiz.Questio
 	return ques.GetQuestions(), nil
 }
 
-func (quizInterface) Response(ctx context.Context, resp *iquiz.QuizResponse) (*iquiz.Void, error) {
-	empty := &iquiz.Void{}
-
+func (quizInterface) Response(ctx context.Context, req *iquiz.QuizResponse) (*iquiz.Rank, error) {
+	
 	all_questions := ques.GetQuestions()
 
-	fmt.Printf("- Results for Name: %s \n", resp.Name)
+	fmt.Printf("- Results for Name: %s \n", req.Name)
 	correct := 0
 	for _, quest := range all_questions.Questions {
-		for _, a := range resp.Answers {
+		for _, a := range req.Answers {
 			if quest.Id != a.Id {
 				continue
 			}
@@ -68,6 +67,27 @@ func (quizInterface) Response(ctx context.Context, resp *iquiz.QuizResponse) (*i
 	}
 
 	result := int((float64(correct) / float64(len(all_questions.Questions))) * 100)
+
 	fmt.Printf("Result: %d \n", result)
-	return empty, nil
+
+	resp := &iquiz.Rank{
+		Name: req.Name,
+		Points: int32(result),
+		Ranking: 3,
+		TotalParticipants: 4,
+	}
+
+	return resp, nil
+}
+
+func (quizInterface) Rankings(ctx context.Context, void *iquiz.Void ) (*iquiz.RankingList, error ) {
+	resp := &iquiz.RankingList {}
+	rank := &iquiz.Rank{
+		Name: "TEST",
+		Points: int32(32),
+		Ranking: 3,
+		TotalParticipants: 4,
+	}
+	resp.Rankings = append( resp.Rankings, rank )
+	return resp, nil
 }

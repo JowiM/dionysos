@@ -64,10 +64,9 @@ var playCmd = &cobra.Command{
 			log.Fatalf("Could not send questions to server: %v", err)
 			os.Exit(1)
 		}
-	},
-	PostRun: func(cmd *cobra.Command, args []string) {
-		fmt.Println( "Done already? \n")
-	},
+
+		fmt.Printf( "- %s you have scored [%d] ranking you [%d] from [%d] \n", name, ranking.Points, ranking.Ranking, ranking.TotalParticipants )
+	}
 }
 
 func init() {
