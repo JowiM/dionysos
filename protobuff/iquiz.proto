@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package iquiz;
+
+message Question {
+	int32 id = 1;
+	string question = 2;
+	string correct_answer = 3;
+	repeated string answer_options = 4; 
+}
+
+message Answer {
+	int32 id = 1;
+	string answer = 2;
+}
+
+message QuizResponse {
+	string name = 1;
+	repeated Answer answer = 2;
+}
+
+message QuestionList {
+	repeated Question questions = 1;
+}
+
+message Void {}
+
+service Quiz {
+	rpc CheatSheet(Void) returns(QuestionList) {}
+}
