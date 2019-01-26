@@ -16,8 +16,14 @@ package cmd
 
 import (
 	"fmt"
-
+	"os"
+	"context"
+	"log"
+	
 	"github.com/spf13/cobra"
+	"google.golang.org/grpc"
+
+	"iquiz"
 )
 
 // getQACmd represents the getQA command
@@ -26,7 +32,25 @@ var getQACmd = &cobra.Command{
 	Short: "List all questions and its corresponding answers",
 	Long: `List all questions and corresponding answers aka Cheat Sheet.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("getQA called")
+		fmt.Println("-- CheatSheet --")
+
+		conn, err := grpc.Dial(":10101", grpc.WithInsecure())
+		if err != nil {
+			log.Fatalf("Could not connect to backend: %v\n", err)
+			os.Exit(1)
+		}
+
+		client := iquiz.NewQuizClient(conn)
+
+		l, err := client.CheatSheet(context.Background(), &iquiz.Void{})
+		if err != nil {
+			log.Fatalf("Could not get questions and Answers: %v", err)
+			os.Exit(1)
+		}
+
+		for _, t := range l.Questions {
+			fmt.Printf("ID: %d \n - Question: %s \n - Answer: %s \n", t.Id, t.Question, t.CorrectAnswer)
+		}
 	},
 }
 
