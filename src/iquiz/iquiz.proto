@@ -24,9 +24,21 @@ message QuestionList {
 	repeated Question questions = 1;
 }
 
+message Rank {
+	string name = 1;
+	int32 points = 2;
+	int32 ranking = 3;
+	int32 totalParticipants = 4;
+}
+
+message RankingList {
+	repeated Rank rankings = 1;
+}
+
 message Void {}
 
 service Quiz {
 	rpc List(Void) returns(QuestionList) {}
-	rpc Response(QuizResponse) returns(Void){}
+	rpc Response(QuizResponse) returns(Rank){}
+	rpc Rankings(Void) returns(RankingList){}
 }
