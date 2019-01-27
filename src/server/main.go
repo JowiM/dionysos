@@ -10,7 +10,6 @@ package main
 
 import (
 	context "context"
-	"fmt"
 	"log"
 	"net"
 
@@ -25,7 +24,7 @@ var ques Questions
 var A_rankings Ranking
 
 func main() {
-	fmt.Println("--- Server Starting ---")
+	log.Println("--- Server Starting on port :10101 ---")
 
 	// Setup Server Port
 	lis, err := net.Listen("tcp", ":10101")
@@ -45,14 +44,14 @@ func main() {
 // Implementation of Interfaces
 
 func (quizInterface) List(ctx context.Context, void *iquiz.Void) (*iquiz.QuestionList, error) {
+	log.Println("Called: [ List ]")
 	return ques.GetQuestions(), nil
 }
 
 func (quizInterface) Response(ctx context.Context, req *iquiz.QuizResponse) (*iquiz.Rank, error) {
-	
+	log.Println("Called: [ Response ]")
 	all_questions := ques.GetQuestions()
 
-	fmt.Printf("- Results for Name: %s \n", req.Name)
 	correct := 0
 	for _, quest := range all_questions.Questions {
 		for _, a := range req.Answers {
@@ -68,19 +67,20 @@ func (quizInterface) Response(ctx context.Context, req *iquiz.QuizResponse) (*iq
 
 	result := int((float64(correct) / float64(len(all_questions.Questions))) * 100)
 
-	fmt.Printf("Result: %d \n", result)
-	
-	ranking, totalParticipants := A_rankings.AddResult( req.Name, result )
-	resp := &iquiz.Rank{	
-		Name: req.Name,
-		Points: int32(result),
-		Ranking: int32(ranking),
+	log.Printf("- Name: %s Points: %d \n", req.Name, result)
+
+	ranking, totalParticipants := A_rankings.AddResult(req.Name, result)
+	resp := &iquiz.Rank{
+		Name:              req.Name,
+		Points:            int32(result),
+		Ranking:           int32(ranking),
 		TotalParticipants: int32(totalParticipants),
 	}
 
 	return resp, nil
 }
 
-func (quizInterface) Rankings(ctx context.Context, void *iquiz.Void ) (*iquiz.RankingList, error ) {
+func (quizInterface) Rankings(ctx context.Context, void *iquiz.Void) (*iquiz.RankingList, error) {
+	log.Println("Called: [ Rankings ]")
 	return A_rankings.All(), nil
 }

@@ -23,6 +23,7 @@ import (
 	"bufio"
 
 	"github.com/spf13/cobra"
+	"github.com/kyokomi/emoji"
 
 	"iquiz"
 	"client/quiz"
@@ -37,9 +38,14 @@ var playCmd = &cobra.Command{
 	Short: "Play our amazing quiz game",
 	Long: `Play our amazing quiz game`,
 	PreRun: func(cmd *cobra.Command, args []string) {
-		fmt.Println("* Lets start answering some serious questions 😱\n")
+		emoji.Println("* :scream: Lets start answering some serious questions :scream:")
+		fmt.Println("*")
+		fmt.Println("* To Answer question enter number of the corresponding answer and press enter!")
+		fmt.Println("* Important to note that if an incorrect value is entered its deemed incorrect")
+		fmt.Println("*")
 		fmt.Println("* Please Enter your Alter Ego (Name):")
 
+		// Read Player Name
 		var reader = bufio.NewReader(os.Stdin)
 		iBuff, err := reader.ReadString('\n')
 		if err != nil {
@@ -57,15 +63,19 @@ var playCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		// Handle game play
 		resp := quiz.Play( l, name )
 
+		// Send Response to server to verify ranking and scores
 		ranking, err2 := client.Response(context.Background(), resp)
 		if err2 != nil {
 			log.Fatalf("Could not send questions to server: %v", err)
 			os.Exit(1)
 		}
 
-		fmt.Printf( "- %s you have scored [%d] ranking you [%d] from [%d] \n", name, ranking.Points, ranking.Ranking, ranking.TotalParticipants )
+		// Calculate Score
+		bestof := 100 - int(( float64(ranking.Ranking) / float64(ranking.TotalParticipants) ) * 100 )
+		emoji.Printf( ":grin: %s you have scored [%d] \n Ranking you { %d/%d} \n Making you better then [%d%%] of all quizer\n", name, ranking.Points, ranking.Ranking, ranking.TotalParticipants, bestof )
 	},
 }
 

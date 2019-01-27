@@ -27,14 +27,21 @@ func verify_answer( ans string, answer_pos int, ans_options []string, correct_an
 	// Convert to integer
 	ans = strings.TrimSpace(ans)
 	i, err := strconv.ParseInt(ans, 10, 64)
-	if err != nil || i < 0 || i > 4 || i != int64(answer_pos) {
+	// @TODO update to case
+	// Not Integer
+	if err != nil {
+		return "", false
+	} else if i < 1 || i > 4 { // Not In range
+	 	return "", false
+	} else if i != int64(answer_pos) { // Not Correct but in range
 	 	// Calculate actual answer if before answer:
 	 	if i > int64(answer_pos) {
 	 		i = i -1
 	 	} 
 	 	i = i-1
+
 		return ans_options[i], false
-	} else {
+	} else { // Correct
 		return correct_ans, true
  	}		 	
 }

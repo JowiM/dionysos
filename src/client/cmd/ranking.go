@@ -28,37 +28,25 @@ import (
 // rankingCmd represents the ranking command
 var rankingCmd = &cobra.Command{
 	Use:   "ranking",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "List the current rankings",
+	Long: `List all the rankings`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("** Ranking called **")
+
+		// Fetch all Rankings 
 		rankings, err := client.Rankings(context.Background(), &iquiz.Void{})
 		if err != nil {
 			log.Fatalf("Could not load rankings from server: %v", err)
 			os.Exit(1)
 		}
 
-		for _, rank := range rankings.Rankings {
-			fmt.Printf( "--- Name: %s - Point: %d \n", rank.Name, rank.Points)
+		// List all Rankings
+		for i, rank := range rankings.Rankings {
+			fmt.Printf( "%d - Point: %d - { Name: %s } \n", i, rank.Points, rank.Name )
 		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(rankingCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// rankingCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// rankingCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
