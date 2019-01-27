@@ -66,7 +66,7 @@ var playCmd = &cobra.Command{
 		}
 
 		fmt.Printf( "- %s you have scored [%d] ranking you [%d] from [%d] \n", name, ranking.Points, ranking.Ranking, ranking.TotalParticipants )
-	}
+	},
 }
 
 func init() {

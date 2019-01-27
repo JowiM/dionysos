@@ -16,8 +16,13 @@ package cmd
 
 import (
 	"fmt"
+	"context"
+	"log"
+	"os"
 
 	"github.com/spf13/cobra"
+
+	"iquiz"
 )
 
 // rankingCmd represents the ranking command
@@ -31,7 +36,16 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("ranking called")
+		fmt.Println("** Ranking called **")
+		rankings, err := client.Rankings(context.Background(), &iquiz.Void{})
+		if err != nil {
+			log.Fatalf("Could not load rankings from server: %v", err)
+			os.Exit(1)
+		}
+
+		for _, rank := range rankings.Rankings {
+			fmt.Printf( "--- Name: %s - Point: %d \n", rank.Name, rank.Points)
+		}
 	},
 }
 

@@ -17,12 +17,12 @@ import (
 	"google.golang.org/grpc"
 
 	"iquiz"
-	//"https://github.com/JowiM/dionysus/tree/master/src/iquiz"
 )
 
 type quizInterface struct{}
 
 var ques Questions
+var A_rankings Ranking
 
 func main() {
 	fmt.Println("--- Server Starting ---")
@@ -69,25 +69,18 @@ func (quizInterface) Response(ctx context.Context, req *iquiz.QuizResponse) (*iq
 	result := int((float64(correct) / float64(len(all_questions.Questions))) * 100)
 
 	fmt.Printf("Result: %d \n", result)
-
-	resp := &iquiz.Rank{
+	
+	ranking, totalParticipants := A_rankings.AddResult( req.Name, result )
+	resp := &iquiz.Rank{	
 		Name: req.Name,
 		Points: int32(result),
-		Ranking: 3,
-		TotalParticipants: 4,
+		Ranking: int32(ranking),
+		TotalParticipants: int32(totalParticipants),
 	}
 
 	return resp, nil
 }
 
 func (quizInterface) Rankings(ctx context.Context, void *iquiz.Void ) (*iquiz.RankingList, error ) {
-	resp := &iquiz.RankingList {}
-	rank := &iquiz.Rank{
-		Name: "TEST",
-		Points: int32(32),
-		Ranking: 3,
-		TotalParticipants: 4,
-	}
-	resp.Rankings = append( resp.Rankings, rank )
-	return resp, nil
+	return A_rankings.All(), nil
 }
