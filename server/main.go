@@ -15,7 +15,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	"iquiz"
+	"github.com/JowiM/dionysus/iquiz"
 )
 
 type quizInterface struct{}
