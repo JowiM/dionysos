@@ -22,7 +22,7 @@ import (
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 
-	"iquiz"
+	"github.com/JowiM/dionysus/iquiz"
 )
 
 var cfgFile string

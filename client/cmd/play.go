@@ -25,8 +25,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/kyokomi/emoji"
 
-	"iquiz"
-	"client/quiz"
+	"github.com/JowiM/dionysus/iquiz"
+	"github.com/JowiM/dionysus/client/quiz"
 )
 
 var name string

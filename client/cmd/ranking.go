@@ -22,7 +22,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"iquiz"
+	"github.com/JowiM/dionysus/iquiz"
 )
 
 // rankingCmd represents the ranking command

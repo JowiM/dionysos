@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"bufio"
 
-	"iquiz"
+	"github.com/JowiM/dionysus/iquiz"
 )
 
 type Quiz struct {

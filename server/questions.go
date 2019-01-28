@@ -4,7 +4,7 @@
 package main
 
 import (
-	"iquiz"
+	"github.com/JowiM/dionysus/iquiz"
 )
 
 type Questions struct {

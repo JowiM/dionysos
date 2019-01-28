@@ -14,7 +14,7 @@
 
 package main
 
-import "client/cmd"
+import "github.com/JowiM/dionysus/client/cmd"
 
 func main() {
 	cmd.Execute()

@@ -23,7 +23,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/kyokomi/emoji"
 
-	"iquiz"
+	"github.com/JowiM/dionysus/iquiz"
 )
 
 // getQACmd represents the getQA command

@@ -6,7 +6,7 @@ import (
 
 	"github.com/satori/go.uuid"
 
-	"iquiz"
+	"github.com/JowiM/dionysus/iquiz"
 )
 
 type Rank struct {
