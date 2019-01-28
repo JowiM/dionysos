@@ -18,4 +18,3 @@ Client is a cli app with 3 commands:
 	2. './client play' Allows the user to enter name and play game. When all questions answered will give a small report.
 	3. '.client ranking' Lists all the rankings  
 
-	> I set GOPATH to the folder dionysus
